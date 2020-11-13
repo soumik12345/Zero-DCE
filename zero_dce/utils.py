@@ -12,6 +12,7 @@ def download_dataset():
     )
     print('Unpacking Dataset')
     subprocess.run('unrar x Dataset_Part1.rar'.split(' '))
+    print('Done!!!')
 
 
 def init_wandb(project_name, experiment_name, wandb_api_key):

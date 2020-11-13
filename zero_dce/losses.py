@@ -21,7 +21,7 @@ class ColorConstancyLoss(nn.Module):
 
 class ExposureLoss(nn.Module):
 
-    def __init__(self,patch_size,mean_val):
+    def __init__(self, patch_size, mean_val):
         super(ExposureLoss, self).__init__()
         self.pool = nn.AvgPool2d(patch_size)
         self.mean_val = mean_val
@@ -40,7 +40,7 @@ class IlluminationSmoothnessLoss(nn.Module):
         super(IlluminationSmoothnessLoss, self).__init__()
         self.loss_weight = loss_weight
 
-    def forward(self,x):
+    def forward(self, x):
         batch_size = x.size()[0]
         h_x = x.size()[2]
         w_x = x.size()[3]
