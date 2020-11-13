@@ -72,4 +72,4 @@ class Trainer:
             for iteration, image_lowlight in tqdm(enumerate(self.dataloader)):
                 loss = self._train_step(image_lowlight)
                 if iteration % log_frequency == 0:
-                    self._log_step(loss, epoch)
+                    self._log_step(loss, epoch, iteration)
