@@ -65,6 +65,8 @@ class Trainer:
         )
 
     def train(self, epochs=200, log_frequency=100):
+        wandb.watch(self.model)
+        self.model.train()
         for epoch in range(1, epochs + 1):
             print('Epoch {}/{}'.format(epoch, epochs))
             for iteration, image_lowlight in tqdm(enumerate(self.dataloader)):
