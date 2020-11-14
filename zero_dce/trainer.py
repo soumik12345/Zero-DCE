@@ -28,11 +28,14 @@ class Trainer:
             num_workers=num_workers, pin_memory=True
         )
 
-    def build_model(self, pretrain_weights=None, learning_rate=1e-4, weight_decay=1e-4):
+    def build_model(self, pretrain_weights=None):
         self.model = DCENet().cuda()
         self.model.apply(weights_init)
         if pretrain_weights is not None:
-            self.model.load_state_dict(torch.load(pretrain_weights))
+            self.load_weights(pretrain_weights)
+
+    def compile(self, pretrain_weights=None, learning_rate=1e-4, weight_decay=1e-4):
+        self.build_model(pretrain_weights=pretrain_weights)
         self.color_loss = ColorConstancyLoss()
         self.spatial_consistency_loss = SpatialConsistancyLoss()
         self.exposure_loss = ExposureLoss(patch_size=16, mean_val=0.6)
@@ -40,7 +43,7 @@ class Trainer:
         self.optimizer = torch.optim.Adam(
             self.model.parameters(), lr=learning_rate,
             weight_decay=weight_decay
-        )
+        ).cuda()
 
     def _train_step(self, image_lowlight):
         image_lowlight = image_lowlight.cuda()
@@ -81,6 +84,9 @@ class Trainer:
                 loss = self._train_step(image_lowlight)
                 if iteration % log_frequency == 0:
                     self._log_step(loss, epoch, iteration)
+
+    def load_weights(self, weights_path):
+        self.model.load_state_dict(torch.load(weights_path))
 
     def infer_cpu(self, image_path):
         with torch.no_grad():

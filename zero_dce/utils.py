@@ -62,5 +62,5 @@ def dump_tensors(gpu_only=True):
                                                    pretty_size(obj.data.size())))
                     total_size += obj.data.numel()
         except Exception as e:
-            pass
+            print(e)
     print("Total size:", total_size)
