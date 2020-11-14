@@ -36,10 +36,10 @@ class Trainer:
 
     def compile(self, pretrain_weights=None, learning_rate=1e-4, weight_decay=1e-4):
         self.build_model(pretrain_weights=pretrain_weights)
-        self.color_loss = ColorConstancyLoss()
-        self.spatial_consistency_loss = SpatialConsistancyLoss()
-        self.exposure_loss = ExposureLoss(patch_size=16, mean_val=0.6)
-        self.illumination_smoothing_loss = IlluminationSmoothnessLoss()
+        self.color_loss = ColorConstancyLoss().cuda()
+        self.spatial_consistency_loss = SpatialConsistancyLoss().cuda()
+        self.exposure_loss = ExposureLoss(patch_size=16, mean_val=0.6).cuda()
+        self.illumination_smoothing_loss = IlluminationSmoothnessLoss().cuda()
         self.optimizer = torch.optim.Adam(
             self.model.parameters(), lr=learning_rate,
             weight_decay=weight_decay

@@ -7,6 +7,14 @@ from torch.utils import data
 
 
 class LowLightDataset(data.Dataset):
+    """Low-light image dataset
+
+    Pytorch dataset for low-light images
+
+    Args:
+        image_files: List of image file paths
+        image_size: size of each image
+    """
 
     def __init__(self, image_files=None, image_size=256):
         self.image_files = image_files
