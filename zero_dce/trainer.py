@@ -93,7 +93,7 @@ class Trainer:
             image_lowlight = Image.open(image_path)
             if image_size is not None:
                 image = image_lowlight.resize(
-                    (self.image_size, self.image_size),
+                    (image_size, image_size),
                     Image.ANTIALIAS)
             lowlight = (np.asarray(image) / 255.0)
             lowlight = torch.from_numpy(lowlight).float()
@@ -109,7 +109,7 @@ class Trainer:
             image_lowlight = Image.open(image_path)
             if image_size is not None:
                 image = image_lowlight.resize(
-                    (self.image_size, self.image_size),
+                    (image_size, image_size),
                     Image.ANTIALIAS)
             lowlight = (np.asarray(image) / 255.0)
             lowlight = torch.from_numpy(lowlight).float()
