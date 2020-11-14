@@ -107,7 +107,6 @@ class Trainer:
             lowlight = torch.from_numpy(lowlight).float()
             lowlight = lowlight.permute(2, 0, 1)
             lowlight = lowlight.cuda().unsqueeze(0)
-            model = self.model
-            _, enhanced, _ = model(lowlight)
+            _, enhanced, _ = self.model(lowlight)
             enhanced = enhanced.squeeze().permute(1, 2, 0)
         return image_lowlight, enhanced.cpu().numpy()
