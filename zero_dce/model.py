@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-from torch.nn import functional as F
 
 
 class DCENet(nn.Module):
@@ -23,7 +22,7 @@ class DCENet(nn.Module):
         x4 = self.relu(self.conv4(x3))
         x5 = self.relu(self.conv5(torch.cat([x3, x4], 1)))
         x6 = self.relu(self.conv6(torch.cat([x2, x5], 1)))
-        x_r = F.tanh(self.conv7(torch.cat([x1, x6], 1)))
+        x_r = torch.tanh(self.conv7(torch.cat([x1, x6], 1)))
         r1, r2, r3, r4, r5, r6, r7, r8 = torch.split(x_r, 3, dim=1)
         x = x + r1 * (torch.pow(x, 2) - x)
         x = x + r2 * (torch.pow(x, 2) - x)
