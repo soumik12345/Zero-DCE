@@ -88,10 +88,14 @@ class Trainer:
     def load_weights(self, weights_path):
         self.model.load_state_dict(torch.load(weights_path))
 
-    def infer_cpu(self, image_path):
+    def infer_cpu(self, image_path, image_size=None):
         with torch.no_grad():
             image_lowlight = Image.open(image_path)
-            lowlight = (np.asarray(image_lowlight) / 255.0)
+            if image_size is not None:
+                image = image_lowlight.resize(
+                    (self.image_size, self.image_size),
+                    Image.ANTIALIAS)
+            lowlight = (np.asarray(image) / 255.0)
             lowlight = torch.from_numpy(lowlight).float()
             lowlight = lowlight.permute(2, 0, 1)
             lowlight = lowlight.unsqueeze(0)
@@ -100,10 +104,14 @@ class Trainer:
             enhanced = enhanced.squeeze().permute(1, 2, 0)
         return image_lowlight, enhanced.numpy()
 
-    def infer_gpu(self, image_path):
+    def infer_gpu(self, image_path, image_size=None):
         with torch.no_grad():
             image_lowlight = Image.open(image_path)
-            lowlight = (np.asarray(image_lowlight) / 255.0)
+            if image_size is not None:
+                image = image_lowlight.resize(
+                    (self.image_size, self.image_size),
+                    Image.ANTIALIAS)
+            lowlight = (np.asarray(image) / 255.0)
             lowlight = torch.from_numpy(lowlight).float()
             lowlight = lowlight.permute(2, 0, 1)
             lowlight = lowlight.cuda().unsqueeze(0)
