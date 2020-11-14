@@ -7,3 +7,4 @@ wandb~=0.10.10
 tqdm~=4.51.0
 numpy~=1.19.4
 Pillow~=8.0.1
+matplotlib~=3.3.3

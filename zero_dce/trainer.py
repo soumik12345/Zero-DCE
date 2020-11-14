@@ -1,6 +1,8 @@
 import os
 import torch
 import wandb
+import numpy as np
+from PIL import Image
 from .losses import *
 from tqdm import tqdm
 from torch.utils import data
@@ -54,15 +56,18 @@ class Trainer:
         self.optimizer.step()
         return loss.item()
 
+    def save_model(self, path):
+        torch.save(self.model.state_dict(), path)
+
     def _log_step(self, loss, epoch, iteration):
         wandb.log({'Loss': loss})
-        torch.save(
-            self.model.state_dict(),
-            os.path.join(
-                wandb.run.dir,
-                'model_{}_{}.pth'.format(epoch, iteration)
+        if epoch % 20 == 0:
+            self.save_model(
+                os.path.join(
+                    './checkpoints/',
+                    'model_{}_{}.pth'.format(epoch, iteration)
+                )
             )
-        )
 
     def train(self, epochs=200, log_frequency=100, notebook=True):
         wandb.watch(self.model)
@@ -76,3 +81,27 @@ class Trainer:
                 loss = self._train_step(image_lowlight)
                 if iteration % log_frequency == 0:
                     self._log_step(loss, epoch, iteration)
+
+    def infer_cpu(self, image_path):
+        with torch.no_grad():
+            image_lowlight = Image.open(image_path)
+            lowlight = (np.asarray(image_lowlight) / 255.0)
+            lowlight = torch.from_numpy(lowlight).float()
+            lowlight = lowlight.permute(2, 0, 1)
+            lowlight = lowlight.unsqueeze(0)
+            model = self.model.cpu()
+            _, enhanced, _ = model(lowlight)
+            enhanced = enhanced.squeeze().permute(1, 2, 0)
+        return image_lowlight, enhanced.numpy()
+
+    def infer_gpu(self, image_path):
+        with torch.no_grad():
+            image_lowlight = Image.open(image_path)
+            lowlight = (np.asarray(image_lowlight) / 255.0)
+            lowlight = torch.from_numpy(lowlight).float()
+            lowlight = lowlight.permute(2, 0, 1)
+            lowlight = lowlight.cuda().unsqueeze(0)
+            model = self.model
+            _, enhanced, _ = model(lowlight)
+            enhanced = enhanced.squeeze().permute(1, 2, 0)
+        return image_lowlight, enhanced.cpu().numpy()
