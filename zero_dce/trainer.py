@@ -64,9 +64,12 @@ class Trainer:
             )
         )
 
-    def train(self, epochs=200, log_frequency=100):
+    def train(self, epochs=200, log_frequency=100, notebook=True):
         wandb.watch(self.model)
         self.model.train()
+        if notebook:
+            from tqdm.notebook import tqdm as tqdm_notebook
+            tqdm = tqdm_notebook
         for epoch in range(1, epochs + 1):
             print('Epoch {}/{}'.format(epoch, epochs))
             for iteration, image_lowlight in tqdm(enumerate(self.dataloader)):
