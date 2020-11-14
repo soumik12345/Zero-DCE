@@ -11,6 +11,7 @@ from .dataloader import LowLightDataset
 
 
 class Trainer:
+    """Trainer for Lowlight Image Enhancement using Zero DCE"""
 
     def __init__(self):
         self.dataloader = None
@@ -22,6 +23,14 @@ class Trainer:
         self.optimizer = None
 
     def build_dataloader(self, image_path, image_size=256, batch_size=8, num_workers=4):
+        """Build Dataloader for training
+
+        Args:
+            image_path: list of image files
+            image_size: size of image for resizing
+            batch_size: batch size for training
+            num_workers: number of workers for dataloader
+        """
         dataset = LowLightDataset(image_files=image_path, image_size=image_size)
         self.dataloader = data.DataLoader(
             dataset, batch_size=batch_size, shuffle=True,
@@ -29,12 +38,26 @@ class Trainer:
         )
 
     def build_model(self, pretrain_weights=None):
+        """Build DCENet Model
+
+        Args:
+            pretrain_weights: Path to pre-trained weights
+        """
         self.model = DCENet().cuda()
         self.model.apply(weights_init)
         if pretrain_weights is not None:
             self.load_weights(pretrain_weights)
 
     def compile(self, pretrain_weights=None, learning_rate=1e-4, weight_decay=1e-4):
+        """Compile Trainer
+
+        Builds Model, Losses and Optimizer
+
+        Args:
+            pretrain_weights: Path to pre-trained weights
+            learning_rate: Learning Rate
+            weight_decay: Weight Decay
+        """
         self.build_model(pretrain_weights=pretrain_weights)
         self.color_loss = ColorConstancyLoss().cuda()
         self.spatial_consistency_loss = SpatialConsistancyLoss().cuda()
@@ -60,6 +83,11 @@ class Trainer:
         return loss.item()
 
     def save_model(self, path):
+        """Save Trained Model
+
+        Args:
+            path: path to save the model
+        """
         torch.save(self.model.state_dict(), path)
 
     def _log_step(self, loss, epoch, iteration):
@@ -73,6 +101,13 @@ class Trainer:
             )
 
     def train(self, epochs=200, log_frequency=100, notebook=True):
+        """Train Model
+
+        Args:
+            epochs: number of epochs
+            log_frequency: frequency of logging
+            notebook: environment is notebook or not
+        """
         wandb.watch(self.model)
         self.model.train()
         if notebook:
@@ -86,9 +121,20 @@ class Trainer:
                     self._log_step(loss, epoch, iteration)
 
     def load_weights(self, weights_path):
+        """Load Weights from Checkpoint
+
+        Args:
+            weights_path: path to model checkpoint
+        """
         self.model.load_state_dict(torch.load(weights_path))
 
     def infer_cpu(self, image_path, image_size=None):
+        """Infer on CPU
+
+        Args:
+            image_path: path to image
+            image_size: size of image for resizing
+        """
         with torch.no_grad():
             image_lowlight = Image.open(image_path)
             if image_size is not None:
@@ -105,6 +151,12 @@ class Trainer:
         return image_lowlight, enhanced.numpy()
 
     def infer_gpu(self, image_path, image_size=None):
+        """Infer on GPU
+
+        Args:
+            image_path: path to image
+            image_size: size of image for resizing
+        """
         with torch.no_grad():
             image_lowlight = Image.open(image_path)
             if image_size is not None:

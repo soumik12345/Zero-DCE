@@ -3,6 +3,7 @@ import torch.nn as nn
 
 
 class DCENet(nn.Module):
+    """DCENet Module"""
 
     def __init__(self, n_filters=32):
         super(DCENet, self).__init__()

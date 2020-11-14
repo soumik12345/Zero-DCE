@@ -4,6 +4,7 @@ from torch.nn import functional as F
 
 
 class ColorConstancyLoss(nn.Module):
+    """Color Constancy Loss"""
 
     def __init__(self):
         super(ColorConstancyLoss, self).__init__()
@@ -20,6 +21,7 @@ class ColorConstancyLoss(nn.Module):
 
 
 class ExposureLoss(nn.Module):
+    """Exposure Loss"""
 
     def __init__(self, patch_size, mean_val):
         super(ExposureLoss, self).__init__()
@@ -35,6 +37,7 @@ class ExposureLoss(nn.Module):
 
 
 class IlluminationSmoothnessLoss(nn.Module):
+    """Illumination Smoothing Loss"""
 
     def __init__(self, loss_weight=1):
         super(IlluminationSmoothnessLoss, self).__init__()
@@ -52,6 +55,7 @@ class IlluminationSmoothnessLoss(nn.Module):
 
 
 class SpatialConsistancyLoss(nn.Module):
+    """Spatial Consistancy Loss"""
 
     def __init__(self):
         super(SpatialConsistancyLoss, self).__init__()

@@ -7,24 +7,43 @@ import subprocess
 from matplotlib import pyplot as plt
 
 
-def download_dataset():
+def download_dataset(dataset_tag):
+    """Utility for downloading and unpacking dataset dataset
+
+    Args:
+        dataset_tag: Tag for the respective dataset
+    """
     print('Downloading dataset...')
-    gdown.download(
-        'https://drive.google.com/uc?id=1HiLtYiyT9R7dR9DRTLRlUUrAicC4zzWN',
-        'Dataset_Part1.rar', quiet=False
-    )
-    print('Unpacking Dataset')
-    subprocess.run('unrar x Dataset_Part1.rar'.split(' '))
-    print('Done!!!')
+    if dataset_tag == 'zero_dce':
+        gdown.download(
+            'https://drive.google.com/uc?id=1HiLtYiyT9R7dR9DRTLRlUUrAicC4zzWN',
+            'Dataset_Part1.rar', quiet=False
+        )
+        print('Unpacking Dataset')
+        subprocess.run('unrar x Dataset_Part1.rar'.split(' '))
+        print('Done!!!')
 
 
 def init_wandb(project_name, experiment_name, wandb_api_key):
+    """Initialize Wandb
+
+    Args:
+        project_name: project name on Wandb
+        experiment_name: experiment name on Wandb
+        wandb_api_key: Wandb API Key
+    """
     if project_name is not None and experiment_name is not None:
         os.environ['WANDB_API_KEY'] = wandb_api_key
         wandb.init(project=project_name, name=experiment_name)
 
 
 def plot_result(image, enhanced):
+    """Utility for Plotting inference result
+
+    Args:
+        image: original image
+        enhanced: enhanced image
+    """
     fig = plt.figure(figsize=(12, 12))
     fig.add_subplot(1, 2, 1).set_title('Original Image')
     _ = plt.imshow(image)
@@ -34,13 +53,21 @@ def plot_result(image, enhanced):
 
 
 def pretty_size(size):
-    """Pretty prints a torch.Size object"""
+    """Pretty prints a torch.Size object
+
+    Args:
+        size: tensor size
+    """
     assert (isinstance(size, torch.Size))
     return " × ".join(map(str, size))
 
 
 def dump_tensors(gpu_only=True):
-    """Prints a list of the Tensors being tracked by the garbage collector."""
+    """Prints a list of the Tensors being tracked by the garbage collector
+
+    Args:
+        gpu_only: Use only GPU or not
+    """
     total_size = 0
     for obj in gc.get_objects():
         try:
