@@ -60,13 +60,13 @@ class Trainer:
         """
         self.build_model(pretrain_weights=pretrain_weights)
         self.color_loss = ColorConstancyLoss().cuda()
-        self.spatial_consistency_loss = SpatialConsistancyLoss()
-        self.exposure_loss = ExposureLoss(patch_size=16, mean_val=0.6)
-        self.illumination_smoothing_loss = IlluminationSmoothnessLoss()
+        self.spatial_consistency_loss = SpatialConsistancyLoss().cuda()
+        self.exposure_loss = ExposureLoss(patch_size=16, mean_val=0.6).cuda()
+        self.illumination_smoothing_loss = IlluminationSmoothnessLoss().cuda()
         self.optimizer = torch.optim.Adam(
             self.model.parameters(), lr=learning_rate,
             weight_decay=weight_decay
-        )
+        ).cuda()
 
     def _train_step(self, image_lowlight):
         image_lowlight = image_lowlight.cuda()
