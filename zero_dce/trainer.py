@@ -66,7 +66,7 @@ class Trainer:
         self.optimizer = torch.optim.Adam(
             self.model.parameters(), lr=learning_rate,
             weight_decay=weight_decay
-        ).cuda()
+        )
 
     def _train_step(self, image_lowlight):
         image_lowlight = image_lowlight.cuda()
