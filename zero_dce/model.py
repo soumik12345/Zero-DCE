@@ -7,13 +7,34 @@ class DCENet(nn.Module):
 
     def __init__(self, n_filters=32):
         super(DCENet, self).__init__()
-        self.conv1 = nn.Conv2d(3, n_filters, 3, 1, 1, bias=True)
-        self.conv2 = nn.Conv2d(n_filters, n_filters, 3, 1, 1, bias=True)
-        self.conv3 = nn.Conv2d(n_filters, n_filters, 3, 1, 1, bias=True)
-        self.conv4 = nn.Conv2d(n_filters, n_filters, 3, 1, 1, bias=True)
-        self.conv5 = nn.Conv2d(n_filters * 2, n_filters, 3, 1, 1, bias=True)
-        self.conv6 = nn.Conv2d(n_filters * 2, n_filters, 3, 1, 1, bias=True)
-        self.conv7 = nn.Conv2d(n_filters * 2, 24, 3, 1, 1, bias=True)
+        self.conv1 = nn.Conv2d(
+            in_channels=3, out_channels=n_filters,
+            kernel_size=3, stride=1, padding=1, bias=True
+        )
+        self.conv2 = nn.Conv2d(
+            in_channels=n_filters, out_channels=n_filters,
+            kernel_size=3, stride=1, padding=1, bias=True
+        )
+        self.conv3 = nn.Conv2d(
+            in_channels=n_filters, out_channels=n_filters,
+            kernel_size=3, stride=1, padding=1, bias=True
+        )
+        self.conv4 = nn.Conv2d(
+            in_channels=n_filters, out_channels=n_filters,
+            kernel_size=3, stride=1, padding=1, bias=True
+        )
+        self.conv5 = nn.Conv2d(
+            in_channels=n_filters * 2, out_channels=n_filters,
+            kernel_size=3, stride=1, padding=1, bias=True
+        )
+        self.conv6 = nn.Conv2d(
+            in_channels=n_filters * 2, out_channels=n_filters,
+            kernel_size=3, stride=1, padding=1, bias=True
+        )
+        self.conv7 = nn.Conv2d(
+            in_channels=n_filters * 2, out_channels=24,
+            kernel_size=3, stride=1, padding=1, bias=True
+        )
         self.relu = nn.ReLU(inplace=True)
 
     def forward(self, x):
