@@ -6,6 +6,8 @@ Pytorch implementation of Zero-Reference Deep Curve Estimation for Low-Light Ima
 
 **Access Notebooks using Binder:** [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/soumik12345/Zero-DCE/HEAD)
 
+**Find Training Logs on Wandb:** [https://wandb.ai/19soumik-rakshit96/zero-dce](https://wandb.ai/19soumik-rakshit96/zero-dce)
+
 ## Results
 
 ![](./assets/inference_1.png)
