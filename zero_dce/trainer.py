@@ -128,18 +128,22 @@ class Trainer:
         """
         self.model.load_state_dict(torch.load(weights_path))
 
-    def infer_cpu(self, image_path, image_size=None):
+    def infer_cpu(self, image_path, image_resize_factor=None):
         """Infer on CPU
 
         Args:
             image_path: path to image
-            image_size: size of image for resizing
+            image_resize_factor: factor for resizing image for inference
         """
         with torch.no_grad():
             image_lowlight = Image.open(image_path)
-            if image_size is not None:
+            width, height = image_lowlight.size
+            if image_resize_factor is not None:
                 image = image_lowlight.resize(
-                    (image_size, image_size),
+                    (
+                        width // image_resize_factor,
+                        height // image_resize_factor
+                    ),
                     Image.ANTIALIAS)
             lowlight = (np.asarray(image) / 255.0)
             lowlight = torch.from_numpy(lowlight).float()
@@ -150,18 +154,22 @@ class Trainer:
             enhanced = enhanced.squeeze().permute(1, 2, 0)
         return image_lowlight, enhanced.numpy()
 
-    def infer_gpu(self, image_path, image_size=None):
+    def infer_gpu(self, image_path, image_resize_factor=None):
         """Infer on GPU
 
         Args:
             image_path: path to image
-            image_size: size of image for resizing
+            image_resize_factor: factor for resizing image for inference
         """
         with torch.no_grad():
             image_lowlight = Image.open(image_path)
-            if image_size is not None:
+            width, height = image_lowlight.size
+            if image_resize_factor is not None:
                 image = image_lowlight.resize(
-                    (image_size, image_size),
+                    (
+                        width // image_resize_factor,
+                        height // image_resize_factor
+                    ),
                     Image.ANTIALIAS)
             lowlight = (np.asarray(image) / 255.0)
             lowlight = torch.from_numpy(lowlight).float()
