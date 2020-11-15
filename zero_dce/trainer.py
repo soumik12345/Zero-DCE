@@ -67,10 +67,6 @@ class Trainer:
             self.model.parameters(), lr=learning_rate,
             weight_decay=weight_decay
         )
-        self.color_loss.cuda()
-        self.spatial_consistency_loss.cuda()
-        self.exposure_loss.cuda()
-        self.illumination_smoothing_loss.cuda()
 
     def _train_step(self, image_lowlight):
         image_lowlight = image_lowlight.cuda()
