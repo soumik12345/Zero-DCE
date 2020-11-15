@@ -4,7 +4,7 @@ Pytorch implementation of Zero-Reference Deep Curve Estimation for Low-Light Ima
 
 ![](https://li-chongyi.github.io/Zero-DCE_files/framework.png)
 
-**Access Notebooks using Binder: ** [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/soumik12345/Zero-DCE/HEAD)
+**Access Notebooks using Binder:** [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/soumik12345/Zero-DCE/HEAD)
 
 ## Results
 
