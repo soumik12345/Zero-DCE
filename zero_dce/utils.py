@@ -11,7 +11,8 @@ def download_dataset(dataset_tag):
     """Utility for downloading and unpacking dataset dataset
 
     Args:
-        dataset_tag: Tag for the respective dataset
+        dataset_tag: Tag for the respective dataset.
+        Available tags -> ('zero_dce', 'dark_face')
     """
     print('Downloading dataset...')
     if dataset_tag == 'zero_dce':
@@ -22,6 +23,16 @@ def download_dataset(dataset_tag):
         print('Unpacking Dataset')
         subprocess.run('unrar x Dataset_Part1.rar'.split(' '))
         print('Done!!!')
+    elif dataset_tag == 'dark_face':
+        gdown.download(
+            'https://drive.google.com/uc?id=11KaOhxcOh68_NyZwacBoabEJ6FgPCsnQ',
+            'DarkPair.zip', quiet=False
+        )
+        print('Unpacking Dataset')
+        subprocess.run('unzip DarkPair.zip'.split(' '))
+        print('Done!!!')
+    else:
+        raise AssertionError('Dataset tag not found')
 
 
 def init_wandb(project_name, experiment_name, wandb_api_key):
