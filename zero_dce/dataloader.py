@@ -1,35 +1,27 @@
-import numpy as np
-from PIL import Image
-from random import shuffle
-
-import torch
-from torch.utils import data
+from typing import List
+import tensorflow as tf
 
 
-class LowLightDataset(data.Dataset):
-    """Low-light image dataset
+class LowLightDataLoader:
 
-    Pytorch dataset for low-light images
-
-    Args:
-        image_files: List of image file paths
-        image_size: size of each image
-    """
-
-    def __init__(self, image_files=None, image_size=256):
-        self.image_files = image_files
+    def __init__(self, low_light_images: List[str], image_size: int = 512):
+        self.low_light_images = low_light_images
         self.image_size = image_size
-        shuffle(self.image_files)
 
-    def __len__(self):
-        return len(self.image_files)
+    def load_data(self, image_path):
+        image = tf.io.read_file(image_path)
+        image = tf.image.decode_png(image, channels=3)
+        image = tf.image.resize(
+            images=image, size=[
+                self.image_size,
+                self.image_size
+            ]
+        )
+        image = image / 255.0
+        return image
 
-    def __getitem__(self, item):
-        image_path = self.image_files[item]
-        image = Image.open(image_path)
-        image = image.resize(
-            (self.image_size, self.image_size), Image.ANTIALIAS)
-        image = (np.asarray(image) / 255.0)
-        image = torch.from_numpy(image).float()
-        image_data = image.permute(2, 0, 1)
-        return image_data
+    def get_dataset(self, batch_size: int = 4):
+        dataset = tf.data.Dataset.from_tensor_slices(self.low_light_images)
+        dataset = dataset.map(self.load_data, num_parallel_calls=tf.data.AUTOTUNE)
+        dataset = dataset.batch(batch_size, drop_remainder=True)
+        return dataset
