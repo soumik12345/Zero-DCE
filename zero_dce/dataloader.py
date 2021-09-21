@@ -4,7 +4,7 @@ import tensorflow as tf
 
 class LowLightDataLoader:
 
-    def __init__(self, low_light_images: List[str], image_size: int = 512):
+    def __init__(self, low_light_images: List[str], image_size: int = 256):
         self.low_light_images = low_light_images
         self.image_size = image_size
 

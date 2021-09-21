@@ -1,5 +1,6 @@
 data/
 venv/
 .idea/
+dataset/
 .DS_Store
 **pycache**
